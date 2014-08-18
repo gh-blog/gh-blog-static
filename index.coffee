@@ -19,8 +19,13 @@ module.exports = (blog, options = { pretty: yes }) ->
                 locals.language = post.language || blog.language
                 # @TODO: throw err if not defined
                 locals.strings = file.strings
-                try locals.dateAdded = file.formatDate file.dateAdded
-                try locals.dateModified = file.formatDate file.dateModified
+
+                if not locals.strings
+                    e = new TypeError 'No localization strings provided'
+                    console.log e # @TODO
+                    @emit 'error', e
+
+                locals.formatDate = file.formatDate
 
                 templateFile = "#{__dirname}/templates/#{templateFile}.jade"
                 renderFn = compileFile templateFile, options
