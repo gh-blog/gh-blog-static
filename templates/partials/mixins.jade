@@ -1,0 +1,40 @@
+mixin date(date, format)
+    if date
+        time.date(time-ago=date.toJSON())=date.toLocaleString()
+
+mixin post(post)
+    .post-inner
+        .content.markdown-body(dir=post.dir || blog.dir || strings.dir)
+            if !attributes.excerpt
+                article
+                    !=String(post.contents)
+                footer
+                    small.metadata
+                        span.author!=strings.writtenBy
+                        | 
+                        +date(post.dateAdded, blog.dateFormat)
+                        if post.dateModified
+                            | #{strings.modifiedOn}
+                            | 
+                            +date(post.dateModified, blog.dateFormat)
+                block
+            else
+                h2.title= post.title
+                p.excerpt= post.excerpt
+                footer
+                    small.metadata #{strings.writtenOn}
+                        +date(post.dateAdded, blog.dateFormat)
+
+                if post.image
+                    .cover.media-container: img(src=post.image)
+
+mixin page(page)
+    .page
+        for post in page
+            a.post(class=post.type, href=post.url)
+                +post(post)(excerpt=true)
+
+mixin paginate(currentIndex, total)
+    div current page: #{currentIndex}
+    each page in total
+        a(href=page)

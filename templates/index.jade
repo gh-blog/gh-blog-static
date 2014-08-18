@@ -1,0 +1,5 @@
+extends partials/base
+block content  
+    .home-view
+        +page(blog.pages[0])
+    +paginate(0, blog.pages.length)
