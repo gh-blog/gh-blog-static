@@ -1,6 +1,6 @@
 mixin date(date, format)
     if date
-        time.date(time-ago=date.toJSON())=date.toLocaleString()
+        time.date(time-ago=date.toJSON())=formatDate(date)
 
 mixin post(post)
     .post-inner
@@ -17,6 +17,9 @@ mixin post(post)
                             | #{strings.modifiedOn}
                             | 
                             +date(post.dateModified, blog.dateFormat)
+                        div.categories
+                            for category in post.categories
+                                | #{category}
                 block
             else
                 h2.title= post.title
