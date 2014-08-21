@@ -1,5 +1,4 @@
 through2 = require 'through2'
-_ = require 'lodash'
 { compileFile } = require 'jade'
 
 # requires ['l20n']
