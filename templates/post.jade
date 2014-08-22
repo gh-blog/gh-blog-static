@@ -1,7 +1,7 @@
 extends partials/base
 block content
     .post-view
-        .post(class=type)
+        .post(class=post.type)
             +post(post)
                 if comments
                     disqus#comments(shortname=blog.disqus.shortname,
