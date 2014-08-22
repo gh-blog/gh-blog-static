@@ -1,9 +1,17 @@
 through2 = require 'through2'
 { compileFile } = require 'jade'
+_ = {
+    defaults: require 'lodash.defaults'
+}
 
-# requires ['l20n']
+# requires ['l20n'] @TODO: paginate
 
-module.exports = (blog, options = { pretty: yes }) ->
+module.exports = (blog, options = { }) ->
+    options = _.defaults options, {
+        pretty: yes
+        synatxTheme: 'github'
+    }
+
     processFile = (file, enc, done) ->
         if file.isPost
             try
@@ -40,4 +48,7 @@ module.exports = (blog, options = { pretty: yes }) ->
         else
             done null, file
 
-    through2.obj processFile
+    through2.obj processFile, (done) ->
+        
+        # @push indexFile
+        done()
