@@ -1,5 +1,14 @@
 extends partials/base
-block content  
-    .home-view
-        +page(blog.pages[0])
-    +paginate(0, blog.pages.length)
+block content
+    if file.isIndexPage
+        #home-view
+            +page(file)
+        
+        //- +paginate(0, blog.pages.length) // @TODO
+
+    else if file.isPost
+        #post-view
+            .post(class='post-#{file.type}')
+                +post(file)
+                    if file.comments
+                        #post-comments!=file.comments

@@ -8,11 +8,11 @@ header#header
         span.icon-group
             //- label=description
             for item in blog.social
-                a(href=item.link, title=item.title): i.icon(class='icon-' + item.icon)
+                a(href=item.link, title=item.title): i.icon(class='icon-#{item.icon}')
             if blog.rss
                 a(href=rss, title='RSS'): i.icon(class='icon-rss')
 
     .search
         .card.card-input
             i.icon.icon-search
-            input(type='search', placeholder=strings.searchPlaceholder)
+            input(type='search', placeholder=blog.strings.searchPlaceholder)

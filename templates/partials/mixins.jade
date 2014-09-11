@@ -1,20 +1,20 @@
 mixin date(date, format)
     if date
-        time.date(time-ago=date.toJSON())=formatDate(date)
+        time.date(time-ago=date.toJSON())=blog.formatDate(date)
 
 mixin post(post)
     .post-inner
-        .content.markdown-body(dir=post.dir || blog.dir || strings.dir)
+        .content.markdown-body(dir=post.dir || blog.dir || blog.strings.dir)
             if !attributes.excerpt
                 article
                     !=String(post.contents)
                 footer
                     small.metadata
-                        span.author!=strings.writtenBy
+                        span.author!=post.strings.writtenBy
                         | 
                         +date(post.created.date, blog.dateFormat)
                         if post.modified
-                            | #{strings.modifiedOn}
+                            | #{post.strings.modifiedOn}
                             | 
                             +date(post.modified.date, blog.dateFormat)
                         div.categories
@@ -25,7 +25,7 @@ mixin post(post)
                 h2.title= post.title
                 p.excerpt= post.excerpt
                 footer
-                    small.metadata #{strings.writtenOn}
+                    small.metadata #{post.strings.writtenOn}
                         +date(post.created.date, blog.dateFormat)
 
                 if post.image
@@ -33,8 +33,9 @@ mixin post(post)
 
 mixin page(page)
     .page
-        for post in page
-            a.post(class=post.type, href=post.url)
+        each post in page.data
+            //- @TODO: href=post.url
+            a.post(class=post.type)
                 +post(post)(excerpt=true)
 
 mixin paginate(currentIndex, total)

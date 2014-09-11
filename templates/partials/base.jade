@@ -1,12 +1,12 @@
 doctype html
 include mixins
-html(lang=blog.language, manifest=blog.manifest, dir=blog.dir || strings.dir, ng-app='blog')
+html(lang=blog.language, manifest=blog.manifest, dir=blog.dir || blog.strings.dir, ng-app='blog')
     head
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
         
         meta(name='description', content=blog.description)
-        title=post ? (blog.title + ' - ' + post.title) : post.title
+        title=title
         
         if rss
             link(rel='alternate', type='application/rss+xml', title='RSS', href=rss)
@@ -19,7 +19,7 @@ html(lang=blog.language, manifest=blog.manifest, dir=blog.dir || strings.dir, ng
     
     //- @TODO: microdata
     body(itemscope, itemtype='http://schema.org/WebPage')
-        //- noscript.centered= strings.noScript
+        //- noscript.centered= blog.strings.noScript
         include header
         
         block content

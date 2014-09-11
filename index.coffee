@@ -4,51 +4,40 @@ _ = {
     defaults: require 'lodash.defaults'
 }
 
-# requires ['l20n'] @TODO: paginate
-
 module.exports = (blog, options = { }) ->
     options = _.defaults options, {
         pretty: yes
-        synatxTheme: 'github'
     }
 
     processFile = (file, enc, done) ->
-        if file.isPost
-            try
-                post = file
-                templateFile = 'post'
+        try
+            if not file.isPost and not file.isIndexPage
+                return done null, file
 
-                locals = { blog, post }
-                locals.styles = post.styles || blog.styles || []
-                locals.scripts = post.scripts || blog.scripts || []
-                locals.icons = post.scripts || blog.scripts || []
-                locals.manifest = blog.manifest || ''
-                locals.language = post.language || blog.language
-                # @TODO: throw err if not defined
-                locals.strings = file.strings
+            # @TODO: console.log "Processing #{file.path}, is index page?", Boolean(file.isIndexPage)
 
-                if not locals.strings
-                    e = new TypeError 'No localization strings provided'
-                    console.log e # @TODO
-                    @emit 'error', e
+            locals = { blog, file }
+            locals.title = switch
+                when file.isPost then "#{blog.title} - #{file.title}"
+                when file.isIndexPage then "#{blog.title} - #{file.index + 1}"
+                else blog.title
 
-                locals.formatDate = file.formatDate
+            locals.styles = Array::concat (blog.styles || []), (file.styles || [])
+            locals.scripts = Array::concat (blog.scripts || []), (file.scripts || [])
+            locals.icons = Array::concat (blog.icons || []), (file.icons || []) # @TODO: throw err if not defined + merge with blog strings
+            # locals.formatDate = blog.formatDate
 
-                templateFile = "#{__dirname}/templates/#{templateFile}.jade"
-                renderFn = compileFile templateFile, options
+            console.log
 
-                html = renderFn locals
-
-                file.contents = new Buffer html
-                done null, file
-            catch e
-                # @TODO
-                console.log '[static] error:', e
-                done e, file
-        else
+            templateFile = "#{__dirname}/templates/index.jade"
+            renderFn = compileFile templateFile, options
+            html = renderFn locals
+            file.contents = new Buffer html
             done null, file
 
-    through2.obj processFile, (done) ->
-        
-        # @push indexFile
-        done()
+        catch e
+            # @TODO
+            console.log '[static] Error:', (e.message || e.toString() || e)
+            done e, file
+
+    through2.obj processFile
