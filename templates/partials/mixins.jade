@@ -12,7 +12,8 @@ mixin post(post)
                     small.metadata
                         span.author!=post.strings.writtenBy
                         | 
-                        +date(post.created.date, blog.dateFormat)
+                        if post.created && post.created.date
+                            +date(post.created.date, blog.dateFormat)
                         if post.modified
                             | #{post.strings.modifiedOn}
                             | 
@@ -26,7 +27,8 @@ mixin post(post)
                 p.excerpt= post.excerpt
                 footer
                     small.metadata #{post.strings.writtenOn}
-                        +date(post.created.date, blog.dateFormat)
+                        if post.created && post.created.date
+                            +date(post.created.date, blog.dateFormat)
 
                 if post.image
                     .cover.media-container: img(src=post.image)

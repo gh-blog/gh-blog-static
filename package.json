@@ -1,6 +1,6 @@
 {
   "name": "gh-blog-static",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Static blog generator for gh-blog.",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,12 @@
   },
   "gh-blog": {
     "requires": ["info", "content", "excerpt", "index", "pagination", "localization", "creation-date"],
-    "recommends": ["scripts", "styles", "embed", "comments", "content-type", "metadata", "modification-date", "local-images", "status", "text-direction", "rss"],
+    "recommends": [
+        "scripts", "styles", "embed",
+        "comments", "content-type", "metadata",
+        "modification-date", "local-images", "status",
+        "text-direction", "rss", "emoji"
+    ],
     "provides": ["static"]
   }
 }

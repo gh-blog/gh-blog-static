@@ -4,10 +4,12 @@ _ = {
     defaults: require 'lodash.defaults'
 }
 
-module.exports = (blog, options = { }) ->
+module.exports = (options = { }) ->
     options = _.defaults options, {
         pretty: yes
     }
+
+    blog = options.blog
 
     processFile = (file, enc, done) ->
         try
@@ -26,8 +28,6 @@ module.exports = (blog, options = { }) ->
             locals.scripts = Array::concat (blog.scripts || []), (file.scripts || [])
             locals.icons = Array::concat (blog.icons || []), (file.icons || []) # @TODO: throw err if not defined + merge with blog strings
             # locals.formatDate = blog.formatDate
-
-            console.log
 
             templateFile = "#{__dirname}/templates/index.jade"
             renderFn = compileFile templateFile, options
